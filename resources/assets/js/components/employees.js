@@ -12,7 +12,6 @@ Vue.component('employees', {
                 'email':''
             },
             selected: [],
-            formErrors:{}
         }
     },
 
@@ -83,6 +82,10 @@ Vue.component('employees', {
         },
 
         showModal: function () {
+            this.employee.name = '';
+            this.employee.email= '';
+            this.employee.id = '';
+
             $("#employee-modal").modal('show');
         },
 
@@ -111,6 +114,7 @@ Vue.component('employees', {
                 function(isConfirm){
                     if (isConfirm) {
                         self.destroy(employee_id);
+                        this.selected = [];
                     } 
                 });
         },

@@ -16,7 +16,7 @@ require('./bootstrap');
 //Vue.component('example', require('./components/Example.vue'));
 
 require('./components/employees');
-require('./components/employee-details');
+require('./components/employee-info');
 
 const app = new Vue({
     el: '#app'

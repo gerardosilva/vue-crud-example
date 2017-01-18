@@ -13,13 +13,11 @@
                     <div class="form-group">
                         <label for="title">Name:</label>
                         <input type="text" name="name" class="form-control" v-model="employee.name" />
-                        <span v-if="formErrors['name']" class="error text-danger">@{{ formErrors['name'] }}</span>
                     </div>
 
                     <div class="form-group">
                         <label for="title">Email:</label>
                         <input type="email" name="email" class="form-control" v-model="employee.email" />
-                        <span v-if="formErrors['email']" class="error text-danger">@{{ formErrors['email'] }}</span>
                     </div>
                     <input v-if="employee.id" type="hidden" name="id" class="form-control" v-model="employee.id" />
                     <div class="form-group">

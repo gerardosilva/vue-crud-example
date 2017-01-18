@@ -22,12 +22,8 @@
                         <button class="btn btn-danger" @click="deleteMessage(employee.id)">Delete</button></td>
                 </tr>
             </table>
-            <employee-info :employee="selected" inline-template>
-                <div class="container">
-                    <div v-show="employee.name">Name: <span>@{{ employee.name }}</span></div>
-                    <div v-show="employee.email">Email: <span>@{{ employee.email }}</span></div>
-                </div>
-            </employee-info>
+
+            @include('layouts.details')
 
             @include('layouts.modal')
         </div>
