@@ -1,10 +1,10 @@
 Vue.component('employees', {
 
-    mounted: function () {
+    mounted() {
         this.getEmployees();
     },
 
-    data: function () {
+    data() {
         return {
             employees:[],
             employee : {
@@ -15,38 +15,38 @@ Vue.component('employees', {
         }
     },
 
-    created: function() {
-        var self = this;
+    created() {
+        let self = this;
 
-        this.$on('reloadTable', function() {
+        this.$on('reloadTable', () => {
             self.getEmployees();
         });
     },
 
     methods: {
-        getEmployees: function () {
+        getEmployees() {
             this.$http.get('/api/v1/employees')
-                .then(function (response) {
+                .then((response) => {
                     this.employees = response.body;
                 });
         },
 
-        create: function () {
-            var employee = this.employee;
+        create() {
+            let employee = this.employee;
             this.$http.post('/api/v1/employees', employee)
-                .then(function (response) {
+                .then((response) => {
                     this.employee.name = '';
                     this.employee.email = '';
 
                     $("#employee-modal").modal('hide');
                     this.successMessage();
                     this.$emit('reloadTable');
-                }, function (response){
+                }, (response) => {
                         this.formErrors = response.data;
                 });
         },
 
-        edit: function (employee) {
+        edit(employee) {
             this.employee.name = employee.name;
             this.employee.id = employee.id;
             this.employee.email = employee.email;
@@ -54,34 +54,34 @@ Vue.component('employees', {
             $("#employee-modal").modal('show');
         },
 
-        update: function () {
-            var employee = this.employee;
+        update() {
+            let employee = this.employee;
             this.$http.put('/api/v1/employees/' + employee.id, employee)
-                .then(function (response) {
+                .then((response) => {
                     this.employee.name = '';
                     this.employee.email = '';
 
                     $("#employee-modal").modal('hide');
                     this.successMessage();
                     this.$emit('reloadTable');
-                }, function (response){
+                }, (response) => {
                     this.formErrors = response.data;
                 });
         },
 
-        destroy: function (employee_id) {
+        destroy(employee_id) {
             this.$http.delete('/api/v1/employees/' + employee_id)
-                .then(function (response) {
+                .then((response) => {
                     this.successMessage();
                     this.$emit('reloadTable');
                 });
         },
         
-        setEmployee: function (employee) {
+        setEmployee(employee) {
             this.selected = employee;
         },
 
-        showModal: function () {
+        showModal() {
             this.employee.name = '';
             this.employee.email= '';
             this.employee.id = '';
@@ -89,7 +89,7 @@ Vue.component('employees', {
             $("#employee-modal").modal('show');
         },
 
-        successMessage: function () {
+        successMessage() {
             swal({
                 title: 'Success!',
                 type: 'success',
@@ -99,7 +99,7 @@ Vue.component('employees', {
         },
 
         deleteMessage: function (employee_id){
-            var self = this;
+            let self = this;
             swal({
                     title: "Are you sure?",
                     text: "You will not be able to recover it",
@@ -111,7 +111,7 @@ Vue.component('employees', {
                     closeOnConfirm: false,
                     closeOnCancel: true
                 },
-                function(isConfirm){
+                (isConfirm) => {
                     if (isConfirm) {
                         self.destroy(employee_id);
                         this.selected = [];
