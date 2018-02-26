@@ -8,9 +8,14 @@
             </div>
             <div class="modal-body">
 
-                <form enctype="multipart/form-data">
+                <form enctype="multipart/form-data" @submit="checkForm" novalidate="true">
 
-                    <div class="form-group">
+                    <div v-if="errors.length" class="alert alert-warning">
+                        <b>Please correct the following error(s):</b>
+                        <p v-for="error in errors">@{{ error }}</p>
+                    </div>
+
+                    <div class="form-group" id="employee-form">
                         <label for="title">Name:</label>
                         <input type="text" name="name" class="form-control" v-model="employee.name" />
                     </div>
@@ -21,8 +26,12 @@
                     </div>
                     <input v-if="employee.id" type="hidden" name="id" class="form-control" v-model="employee.id" />
                     <div class="form-group">
-                        <button v-if="employee.id" type="submit" @click.prevent="update()" class="btn btn-success">Update</button>
-                        <button v-else= type="submit" class="btn btn-success" @click.prevent="create()">Create</button>
+                        <button v-if="employee.id" type="submit" @click.prevent="update()" class="btn btn-success" :disabled="loading">
+                            Update
+                        </button>
+                        <button v-else= type="submit" class="btn btn-success" @click.prevent="create()" :disabled="loading">
+                            Create
+                        </button>
                     </div>
 
                 </form>

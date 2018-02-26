@@ -14,6 +14,11 @@ class EmployeeController extends Controller
      */
     public function create(Request $request)
     {
+        $this->validate($request,[
+            'name' => 'required|max:255',
+            'email' => 'required|email'
+        ]);
+
         $name = $request->name;
         $email = $request->email;
 
@@ -59,6 +64,10 @@ class EmployeeController extends Controller
         return response('ok', 200);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request)
     {
         $employee_id = $request->employee_id;
