@@ -12,6 +12,8 @@ Vue.component('employees', {
                 'email':''
             },
             selected: [],
+            errors: [],
+            loading: false
         }
     },
 
@@ -32,18 +34,27 @@ Vue.component('employees', {
         },
 
         create() {
-            let employee = this.employee;
-            this.$http.post('/api/v1/employees', employee)
-                .then((response) => {
-                    this.employee.name = '';
-                    this.employee.email = '';
+            if(this.checkForm()) {
+                this.loading = true;
+                let employee = this.employee;
 
-                    $("#employee-modal").modal('hide');
-                    this.successMessage();
-                    this.$emit('reloadTable');
-                }, (response) => {
-                        this.formErrors = response.data;
-                });
+                this.$http.post('/api/v1/employees', employee)
+                    .then((response) => {
+                        this.employee.name = '';
+                        this.employee.email = '';
+
+                        $("#employee-modal").modal('hide');
+                        this.successMessage();
+                        this.$emit('reloadTable');
+                        this.loading = false;
+                    }, (response) => {
+                        this.employee.name = '';
+                        this.employee.email = '';
+                        this.loading = false;
+                        $("#employee-modal").modal('hide');
+                        this.errorMessage();
+                    });
+            }
         },
 
         edit(employee) {
@@ -55,18 +66,27 @@ Vue.component('employees', {
         },
 
         update() {
-            let employee = this.employee;
-            this.$http.put('/api/v1/employees/' + employee.id, employee)
-                .then((response) => {
-                    this.employee.name = '';
-                    this.employee.email = '';
+            if(this.checkForm()) {
+                this.loading = true;
+                let employee = this.employee;
 
-                    $("#employee-modal").modal('hide');
-                    this.successMessage();
-                    this.$emit('reloadTable');
-                }, (response) => {
-                    this.formErrors = response.data;
-                });
+                this.$http.put('/api/v1/employees/' + employee.id, employee)
+                    .then((response) => {
+                        this.employee.name = '';
+                        this.employee.email = '';
+
+                        $("#employee-modal").modal('hide');
+                        this.successMessage();
+                        this.$emit('reloadTable');
+                    }, (response) => {
+                        this.employee.name = '';
+                        this.employee.email = '';
+                        this.loading = false;
+
+                        $("#employee-modal").modal('hide');
+                        this.errorMessage();
+                    });
+            }
         },
 
         destroy(employee_id) {
@@ -74,6 +94,8 @@ Vue.component('employees', {
                 .then((response) => {
                     this.successMessage();
                     this.$emit('reloadTable');
+                }, (response) => {
+                    this.errorMessage();
                 });
         },
         
@@ -97,8 +119,16 @@ Vue.component('employees', {
                 timer: 2000
             });
         },
+        errorMessage() {
+            swal({
+                title: 'Something went wrong!',
+                type: 'error',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        },
 
-        deleteMessage: function (employee_id){
+        deleteMessage(employee_id){
             let self = this;
             swal({
                     title: "Are you sure?",
@@ -115,9 +145,25 @@ Vue.component('employees', {
                     if (isConfirm) {
                         self.destroy(employee_id);
                         this.selected = [];
-                    } 
+                    }
                 });
         },
+
+        checkForm() {
+            this.errors = [];
+            if(!this.employee.name) this.errors.push("Name required.");
+            if(!this.employee.email) {
+                this.errors.push("Email required.");
+            } else if(!this.validEmail(this.employee.email)) {
+                this.errors.push("Valid email required.");
+            }
+            if(!this.errors.length) return true;
+        },
+
+        validEmail(email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
 
     }
 });

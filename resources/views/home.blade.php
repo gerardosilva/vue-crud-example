@@ -16,8 +16,8 @@
                     <th>Actions</th>
                 </tr>
                 <tr v-for="employee in employees" @click="setEmployee(employee)">
-                    <td>@{{ employee.name }}</td>
-                    <td>@{{ employee.email }}</td>
+                    <td id="name">@{{ employee.name }}</td>
+                    <td id="email">@{{ employee.email }}</td>
                     <td><button class="btn btn-primary" @click="edit(employee)">Edit</button>
                         <button class="btn btn-danger" @click="deleteMessage(employee.id)">Delete</button></td>
                 </tr>

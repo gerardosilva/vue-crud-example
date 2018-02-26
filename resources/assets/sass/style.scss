@@ -48,3 +48,11 @@ html, body {
 .m-b-md {
   margin-bottom: 30px;
 }
+
+table{
+  tbody{
+    #name, #email{
+      cursor: pointer;
+    }
+  }
+}
